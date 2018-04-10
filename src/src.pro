@@ -128,7 +128,8 @@ SOURCES += main.cpp\
     dialog/vfixnotebookdialog.cpp \
     vplantumlhelper.cpp \
     vgraphvizhelper.cpp \
-    vlivepreviewhelper.cpp
+    vlivepreviewhelper.cpp \
+    vmathjaxpreviewhelper.cpp
 
 HEADERS  += vmainwindow.h \
     vdirectorytree.h \
@@ -247,7 +248,8 @@ HEADERS  += vmainwindow.h \
     dialog/vfixnotebookdialog.h \
     vplantumlhelper.h \
     vgraphvizhelper.h \
-    vlivepreviewhelper.h
+    vlivepreviewhelper.h \
+    vmathjaxpreviewhelper.h
 
 RESOURCES += \
     vnote.qrc \

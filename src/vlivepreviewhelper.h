@@ -11,6 +11,7 @@ class VEditor;
 class VDocument;
 class VGraphvizHelper;
 class VPlantUMLHelper;
+class VMathJaxPreviewHelper;
 
 class CodeBlockPreviewInfo
 {
@@ -154,6 +155,11 @@ private:
 
     VGraphvizHelper *m_graphvizHelper;
     VPlantUMLHelper *m_plantUMLHelper;
+
+    VMathJaxPreviewHelper *m_mathJaxHelper;
+
+    // Identification for VMathJaxPreviewHelper.
+    int m_mathJaxID;
 };
 
 inline bool VLivePreviewHelper::isPreviewEnabled() const

@@ -8,12 +8,18 @@
 #include "vgraphvizhelper.h"
 #include "vplantumlhelper.h"
 #include "vcodeblockhighlighthelper.h"
+#include "vmainwindow.h"
+#include "veditarea.h"
+#include "vmathjaxpreviewhelper.h"
 
 extern VConfigManager *g_config;
+
+extern VMainWindow *g_mainWin;
 
 // Use the highest 4 bits (31-28) to indicate the lang.
 #define LANG_PREFIX_GRAPHVIZ 0x10000000UL
 #define LANG_PREFIX_PLANTUML 0x20000000UL
+#define LANG_PREFIX_MATHJAX  0x30000000UL
 #define LANG_PREFIX_MASK 0xf0000000UL
 
 // Use th 27th bit to indicate the preview type.
@@ -105,6 +111,9 @@ VLivePreviewHelper::VLivePreviewHelper(VEditor *p_editor,
     m_plantUMLMode = g_config->getPlantUMLMode();
     m_graphvizEnabled = g_config->getEnableGraphviz();
     m_mathjaxEnabled = g_config->getEnableMathjax();
+
+    m_mathJaxHelper = g_mainWin->getEditArea()->getMathJaxPreviewHelper();
+    m_mathJaxID = m_mathJaxHelper->registerIdentifier();
 }
 
 bool VLivePreviewHelper::isPreviewLang(const QString &p_lang) const
@@ -246,7 +255,15 @@ void VLivePreviewHelper::updateLivePreview()
         } else {
             m_document->setPreviewContent(vcb.m_lang, cb.imageData());
         }
-    } else if (vcb.m_lang != "puml") {
+    } else if (vcb.m_lang == "mathjax") {
+        if (!cb.hasImageData()) {
+            m_mathJaxHelper->previewMathJax(m_mathJaxID,
+                                            m_cbIndex | LANG_PREFIX_MATHJAX | TYPE_LIVE_PREVIEW,
+                                            removeFence(vcb.m_text));
+        } else {
+            m_document->setPreviewContent(vcb.m_lang, cb.imageData());
+        }
+    } else {
         m_document->previewCodeBlock(m_cbIndex,
                                      vcb.m_lang,
                                      removeFence(vcb.m_text),
